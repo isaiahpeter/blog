@@ -1,0 +1,14 @@
+{% extends "forum/base.html" %}
+{% load static %}
+{% block title %}{{ post.category.title}} {% endblock %}
+
+{% block content %}
+<div class="">
+<img src="{% if post.image %}{{ post.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}" class="post-picture">
+<h1>{{ post.name }}</h1>
+<h2>{{ post.category }}</h2>
+<p>{{ post.content|linebreaks }}</p>
+<p class="date">{{ post.created }} by {{ post.author }}</p>
+<a href="{% url "forum:post_list" %}">Go to Home</a>
+</div>
+{% endblock %}

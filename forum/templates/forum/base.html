@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>{% block title %}Nairum{% endblock %}</title>
+<meta name="viewport" content="width=device-width,initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" href="{% static 'css/blog.css' %}">
+</head>
+<body>
+<a href="{% url 'forum:post_create' %}">new post</a>
+
+<div>
+
+</div>
+<main>
+
+{% block content %}
+
+{% if user.is_authenticated %}
+<p>Hi {{ user.email }}!</p>
+{% else %}
+<p>You are not logged in</p>
+<a href="{% url 'login' %}">Log In</a>
+{% endif %}
+<a href="{% url 'register' %}">Register</a>
+<a href="{% url 'login' %}">Login</a>
+<a href="{% url 'logout' %}">Logout</a>
+<a href="{% url 'profile' %}">Profile</a>
+
+{% endblock content %}
+</main>
+</body>
+</html>
+

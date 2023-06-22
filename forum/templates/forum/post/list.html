@@ -1,0 +1,35 @@
+{% extends "forum/base.html" %}
+{% load static %}
+
+{% block title %}{% if category %} {{ category.name}}{% else %}Posts{% endif %}
+{% endblock %}
+
+{% block content %}
+<div>
+<div >
+<h3>Categories</h3>
+<ul class="list-group">
+<li {% if not category %}{% endif %}>
+<a href="{% url "forum:post_list" %}"> All</a>
+</li>
+{% for c in categories %}
+<li  {% if category.slug == c.slug %}{% endif %}>
+
+<a href="{{ c.get_absolute_url }}">{{ c.name }}</a>
+</li>
+{% endfor %}
+</ul>
+</div>
+<div>
+<h1>{% if category %}{{ category.name }}{% else %} Posts{% endif %}</h1>
+{% for p in posts %}
+	<a href="{{ p.get_absolute_url }}">
+		<img src="{% if p.image  %}{{   p.image.url }} {% else %}{% static "img/no_image.png" %}{% endif %}" class="post-picture">
+<div>
+	<h5><a href="{{ p.get_absolute_url }}">{{ p.title }}</a></h5>
+</div>
+<br>
+</div>
+{% endfor %}
+</div>
+{% endblock %}
