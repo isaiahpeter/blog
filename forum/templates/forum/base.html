@@ -11,25 +11,19 @@
 {% bootstrap_javascript jquery='full' %}
 </head>
 <body>
-<a href="{% url 'forum:post_create' %}">new post</a>
+<a href="{% url 'forum:home' %}">Home</a>
 <div>
 
 </div>
 <main>
-
 {% block content %}
-
 {% if user.is_authenticated %}
-<p>Hi {{ user.email }}!</p>
+<a href="{% url 'forum:post_create' %}">new post</a>
+<p>Hello {{ user.username }}!</p>
 {% else %}
 <p>You are not logged in</p>
-<a href="{% url 'login' %}">Log In</a>
+<a href="{% url 'account_login' %}">Log In</a>
 {% endif %}
-<a href="{% url 'register' %}">Register</a>
-<a href="{% url 'login' %}">Login</a>
-<a href="{% url 'logout' %}">Logout</a>
-<a href="{% url 'profile' %}">Profile</a>
-
 {% endblock content %}
 </main>
 </body>

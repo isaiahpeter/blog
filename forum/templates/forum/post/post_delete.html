@@ -2,7 +2,7 @@
 {% load bootstrap4 %}
 {% block content %}
 <h1>Delete</h1>
-<form action="{% url 'forum:post_delete' post.slug %}" method="POST" class="form">{% csrf_token %}
+<form action="{% url 'forum:post_delete'  post.slug %}" method="POST" class="form">{% csrf_token %}
 
 <p>Are you sure you want to delete "{{ post.title }}"?</p>
 {% buttons %}

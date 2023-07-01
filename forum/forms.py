@@ -6,7 +6,7 @@ class PostForm(forms.ModelForm):
         
     class Meta:
         model = Post
-        fields = ['category', 'title', 'content', 'author', 'status', 'image']
+        fields = ['category', 'title', 'content', 'status', 'image']
         #widgets = {'content':forms.Textarea(attrs={'cols':80})}
     def clean_title(self):
         title = self.cleaned_data['title']
