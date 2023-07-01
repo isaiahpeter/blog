@@ -1,4 +1,5 @@
 {% load static %}
+{% load bootstrap4 %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,10 +7,11 @@
 <title>{% block title %}Nairum{% endblock %}</title>
 <meta name="viewport" content="width=device-width,initial-scale=1, shrink-to-fit=no">
 <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
 </head>
 <body>
 <a href="{% url 'forum:post_create' %}">new post</a>
-
 <div>
 
 </div>

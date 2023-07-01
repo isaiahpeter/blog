@@ -1,35 +1,43 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from .forms import ProfileForm
+from django.contrib.auth import authenticate, login
+from .forms import ProfileForm,RegistrationForm, LoginForm
 
 # Create your views here.
 
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save(commit=False)
-            age = form.cleaned_date.get('age')
-            if age is not None and age < 13:
-                form.add_error('age', 'You must be at least thirteen years old to register.')
-            else:
-                user.save()
-                login(request, user)
-                return redirect('home')
+        user_form = RegistrationForm(request.POST)
+        if user_form.is_valid():
+            new_user = user_form.save(commit=False)
+            new_user.set_password(
+                user_form.cleaned_data['password'])
+            new_user.save()
+            return render(request, 'registration/register_done.html', {'new_user': new_user})
     else:
-        form = RegistrationForm()
-    return render(request, 'registration/register.html', {'form':form})           
+         user_form = RegistrationForm()
+    return render(request, 'registration/register.html', {'user_form': user_form})
 
 def user_login(request):
     if request.method == 'POST':
-        form = AuthenticationForm(request, data=request.POST)
+        form = LoginForm(request.POST)
         if form.is_valid():
-            user = form.get_user()
-            login(requesr, user)
-            return redirect('home')
+            user = form.cleaned_data
+            user = authenticate(request, 
+                                 email=form['email'],
+                                 password=form['password'])
+            if user is not None:
+                if user.is_active:
+                     login(request, user)
+                     return HttpResponse('Authenticated successfully')
+                else:
+                    return HttpResponse('Disabled account')
+            else:
+                return HttpResponse('Invalid login')
+                
     else:
-        form = AuthenticationForm(request)
+        form = LoginForm()
     return render(request, 'registration/login.html', {'form': form})
 
 def user_logout(request):

@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Category, Post, Comment
 from .forms import PostForm, EditForm
+
 from django.views.generic.edit import CreateView, UpdateView
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -27,7 +28,7 @@ def post_create(request):
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
             post = form.save(commit=False)
-            post.author = request.user
+            
             post.save()
             category_slug = post.category.slug
             categories = Category.objects.all()
@@ -41,10 +42,18 @@ def post_create(request):
 def post_edit(request, slug):
     post = get_object_or_404(Post, slug=slug)
     if request.method == 'POST':
-        form = PostForm(request.POST, request.FILES, instance=post)
+        form = EditForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse('post_detail', args=(post.publish.year, post.publish.month, post.publish.day, post.slug)))
+            return HttpResponseRedirect(reverse('forum:post_detail', args=(post.publish.year, post.publish.month, post.publish.day, post.slug)))
     else:
-        form = PostForm(instance=post)
+        form = EditForm(instance=post)
     return render(request, 'forum/post/post_edit.html', {'form': form, 'post':post})
+
+def post_delete(request, slug):
+    post = get_object_or_404(Post, slug=slug)
+    if request.method == 'POST' and request.POST:
+        post.delete()
+        return HttpResponseRedirect(reverse('forum:post_list', args=None))
+    return render(request, 'forum/post/post_delete.html', {'post':post})
+    

@@ -1,11 +1,14 @@
-{% extends "forum/base.html" %}
+\{% extends "forum/base.html" %}
+{% load bootstrap4 %}
 {% block content %}
-<h1>edit Post</h1>
-<form action="{% url 'forum:edit_post' slug %}" method="POST" enctype="multipart/form-data">
+<h1>edit post</h1>
+<form action="{% url 'forum:post_edit' post.slug %}" method="POST" enctype="multipart/form-data" class="form">
 
 {% csrf_token %}
-{{ form.as_p }}
-<button name="submit">save post</button>
+{% bootstrap_form form %}
+{% buttons %}
+<button name="submit" class="btn btn-primary">save post</button>
+{% endbuttons %}
 </form>
 {% endblock content %}
 

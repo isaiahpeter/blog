@@ -23,9 +23,14 @@ class PostForm(forms.ModelForm):
 
 
 
-class EditForm(forms.ModelForm):
+class EditForm(PostForm):
     category = forms.ModelChoiceField(queryset=Category.objects.all())
     class Meta:
         model = Post
-        fields = ['content', 'status', 'image']
-    
+        fields = ['title', 'content', 'status', 'image']
+    def clean_title(self):
+        title = self.cleaned_data['title']
+        slug = slugify(title)
+        return title
+    def save(self, commit=True):
+        PostForm.save(self, commit=True)

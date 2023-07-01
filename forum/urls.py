@@ -9,6 +9,6 @@ urlpatterns = [
     path('<int:year>/<int:month>/<int:day>/<slug:post>/', views.post_detail, name='post_detail'),
     path('post_create', views.post_create, name='post_create'),
     path('edit/<slug:slug>/', views.post_edit, name='post_edit'),
-    
+    path('delete/<slug:slug>/', views.post_delete, name='post_delete'),
 ]
 
