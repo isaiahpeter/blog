@@ -3,5 +3,5 @@ venv/
 *.pyc
 media/
 __pycache__/
-cert.key
-cert.crt
+*.key
+*.crt
