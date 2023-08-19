@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.urls import reverse
 from django.conf import settings
 
+
 # Create your models here.
 
 class Category(models.Model):
@@ -42,6 +43,7 @@ class Post(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL,
                                on_delete=models.CASCADE,
                                related_name='blog_posts')
+                     
     #category = models.ForeignKey(Category, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -52,6 +54,7 @@ class Post(models.Model):
     objects = models.Manager()
     published = PublishedManager()
     image = models.ImageField(upload_to='posts/%Y/%m/%d', blank=True)
+    users_like = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='posts_liked', blank=True)
     class Meta:
         ordering =  ['-publish']
 
@@ -62,14 +65,24 @@ class Post(models.Model):
         return self.title
     def get_absolute_url(self):
         return reverse('forum:post_detail', args=[self.publish.year, self.publish.month, self.publish.day, self.slug]) 
+        
 
 class Comment(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     content = models.TextField()
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
+    active = models.BooleanField(default=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['created']
+        indexes = [
+            models.Index(fields=['created']),
+        ]
 
     def __str__(self):
-        return self.content
+        return f'{self.author} Commented  on {self.post}'
+        
 
 

@@ -1,3 +1,4 @@
+
 """
 Django settings for vet project.
 
@@ -25,7 +26,7 @@ SECRET_KEY = 'django-insecure-!n@8u2!$j$s86*&9#ux%1*mb9m%!j72iiu#z^1ufy=(y_f=o8o
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['mysite.com', 'localhost', '192.168.43.237', '0.0.0.0',]
 
 
 # Application definition
@@ -65,7 +66,7 @@ ROOT_URLCONF = 'vet.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -126,7 +127,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -135,10 +136,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'accounts.CustomUser'
-CRISPY_ALLOWED_TEMPLATE_PACKS = ""
-CRISPY_TEMPLATE_PACK = "bootstrap4"
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
-LOGIN_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "/list"
 ACCOUNT_LOGOUT_REDIRECT = "/"
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https"
 ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 3
@@ -147,9 +148,12 @@ ACCOUNT_AUTHENTICATION_METHOD="email"
 ACCOUNT_EMAIL_REQUIRED=True
 ACCOUNT_LOGOUT_ON_PASSWORD_CHANGE = True
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_SESSION_REMEMBER = True
 ACCOUNT_FORMS ={
-    'signup': 'accounts.forms.RegistrationForm'
-}
+    'signup': 'accounts.forms.RegistrationForm',
+    'profile': 'accounts.forms.ProfileForm',
+    }
 
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",

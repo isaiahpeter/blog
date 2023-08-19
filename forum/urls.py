@@ -11,5 +11,7 @@ urlpatterns = [
     path('post_create', views.post_create, name='post_create'),
     path('edit/<slug:slug>/', views.post_edit, name='post_edit'),
     path('delete/<slug:slug>/', views.post_delete, name='post_delete'),
+    path('<int:post_id>/comment/', views.post_comment, name='post_comment'), 
+    path('like/', views.post_like, name='like'),
 ]
 

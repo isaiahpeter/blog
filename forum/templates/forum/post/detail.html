@@ -15,5 +15,31 @@
 <p>{{ post.content|linebreaks }}</p>
 <p class="date">{{ post.created }} by {{ post.author }}</p>
 <a href="{% url "forum:post_list" %}">Go to Home</a>
+{% with total_likes=post.users_like.count users_like=post.users_like.all %}
+<span class="count"><span class="total">{{ total_likes }}</span>like{{ total_likes|pluralize }}</span>
+<a href="#" data-id="{{ post.id }}" data-action="{% if request.user in users_like %}un{% endif %}like" class="like button">
+{% if request.user not in users_like %}
+Like
+{% else %}
+Unlike
+{% endif %}
+</a>
+{% endwith %}
+{% with comments.count as total_comments %}
+<h2>
+{{ total_comments }} comment {{ total_comments|pluralize }}
+</h2>
+{% endwith %}
+{% for comment in comments %}
+<div class="comment">
+<p class="info">
+Comment {{ forloop.counter }} by {{ comment.author }}
+</p>
+{{ comment.content|linebreaks }}
+</div>
+{% empty %}
+<p>There are no comments.</p>
+{% endfor %}
+{% include "forum/post/includes/comment_form.html" %}
 </div>
 {% endblock %}

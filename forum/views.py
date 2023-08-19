@@ -1,10 +1,12 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Category, Post, Comment
-from .forms import PostForm, EditForm
+from .forms import PostForm, EditForm, CommentForm
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import CreateView, UpdateView
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from accounts.models import CustomUser
+from django.views.decorators.http import require_POST
 # Create your views here.
 
 def home(request):
@@ -23,7 +25,9 @@ def post_list(request,category_slug=None):
 
 def post_detail(request, year, month, day,post):
     post = get_object_or_404(Post,status=Post.Status.PUBLISHED, slug=post, publish__year=year, publish__month=month, publish__day=day)
-    return render(request, 'forum/post/detail.html', {'post': post})
+    comments = post.comments.filter(active=True)
+    form = CommentForm()
+    return render(request, 'forum/post/detail.html', {'post': post, 'comments': comments, 'form': form})
 
 
 @login_required
@@ -62,3 +66,41 @@ def post_delete(request, slug):
         return HttpResponseRedirect(reverse('forum:post_list', args=None))
     return render(request, 'forum/post/post_delete.html', {'post':post})
     
+
+def profile(request, username):
+    user = CustomUser.objects.get(username=username)
+    return render(request, 'forum/post/profile.html', {'user':user})
+
+@require_POST
+def post_comment(request, post_id):
+    post = get_object_or_404(Post, id=post_id, status=Post.Status.PUBLISHED)
+    comment = None
+    form = CommentForm(data=request.POST)
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.post = post
+        comment.author = request.user
+        comment.save()
+    return render(request, 'forum/post/comment.html',
+                           {'post': post,
+                            'form':form,
+                            'comment':comment})
+                            
+
+@login_required
+@required_POST
+def post_like(request):
+    post_id = request.POST.get('id')
+    action = request.POST.get('action')
+    if post_id and action:
+        try:
+            post = Post.objects.get(id=post_id)
+                if action == 'like':
+                    post.users_like.add(request.user)
+                else:
+                    post.users_like.remove(request.user)
+                return JsonResponse({'status': 'ok'})
+        except Post.DoesNotExist:
+            pass
+        return JsonResponse({'status': 'error'})
+            

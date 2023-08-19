@@ -12,7 +12,7 @@ class RegistrationForm(UserCreationForm):
     
     class Meta:
         model = CustomUser
-        fields = ['username','email', 'password1', 'password2','first_name', 'last_name', 'age','gender']
+        fields = [ 'username','email', 'password1', 'password2','first_name', 'last_name', 'age','gender']
     def clean_password2(self):
         cd = self.cleaned_data
         if cd['password1'] != cd['password2']:
@@ -32,11 +32,12 @@ class RegistrationForm(UserCreationForm):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = CustomUser
-        fields = ('username', 'email', 'bio', 'age', 'gender')
+        fields = ( 'email', 'bio', 'age', 'gender')
 class CustomUserCreationForm(UserCreationForm):
     age= forms.IntegerField(label='Age')
     class Meta(UserCreationForm.Meta):
         model = CustomUser
+        fields = ['username', 'email']
     def clean_age(self):
         age = self.cleaned_data['age']
         if age < 13:

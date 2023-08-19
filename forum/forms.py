@@ -1,6 +1,8 @@
 from django import forms
 from .models import Post, Comment, Category
 from django.utils.text import slugify
+
+
 class PostForm(forms.ModelForm):
     category = forms.ModelChoiceField(queryset=Category.objects.all())
         
@@ -34,3 +36,8 @@ class EditForm(PostForm):
         return title
     def save(self, commit=True):
         PostForm.save(self, commit=True)
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']

@@ -6,3 +6,4 @@ from .forms import CustomUserCreationForm, CustomUserChangeForm
 admin.site.register(CustomUser, add_form=CustomUserCreationForm)
 
 
+
