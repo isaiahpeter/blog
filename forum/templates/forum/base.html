@@ -18,6 +18,8 @@
 <li><a class="nav-link" href="{% url 'forum:post_create' %}">Createpost</a></li>
 {% else %}
 <li><a class="nav-link" href="{% url 'account_login' %}">login</a></li>
+<li><a class="nav-link" href="{% url 'account_reset_password' %}">Reset password</a></li>
+<li><a class="nav-link" href="{% url 'account_change_password' %}">Change Password</a></li>
 <li><a class="nav-link" href="{% url 'account_signup' %}">signup</a></li>
 {% endif %}
 <li><a class="nav-link" href="{% url 'forum:post_list' %}">posts</a></li>

@@ -88,18 +88,18 @@ def post_comment(request, post_id):
                             
 
 @login_required
-@required_POST
+@require_POST
 def post_like(request):
     post_id = request.POST.get('id')
     action = request.POST.get('action')
     if post_id and action:
         try:
             post = Post.objects.get(id=post_id)
-                if action == 'like':
-                    post.users_like.add(request.user)
-                else:
-                    post.users_like.remove(request.user)
-                return JsonResponse({'status': 'ok'})
+            if action == 'like':
+                post.users_like.add(request.user)
+            else:
+                post.users_like.remove(request.user)
+            return JsonResponse({'status': 'ok'})
         except Post.DoesNotExist:
             pass
         return JsonResponse({'status': 'error'})
