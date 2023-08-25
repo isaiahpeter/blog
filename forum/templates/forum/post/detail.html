@@ -1,81 +1,49 @@
 {% extends "forum/base.html" %}
 {% load static %}
 
-{% block title %}{{ post.category.title}} {% endblock %}
+{% block title %}{{ post.category.title }}{% endblock %}
 
 {% block content %}
-<div class="">
-{% if user.username == post.author %}
-<a href="{%  url 'forum:post_edit'  post.slug %}">edit post</a>
-<a href="{% url 'forum:post_delete'  post.slug %}">delete post</a>
-{% endif %}
-<img src="{% if post.image %}{{ post.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}" class="post-picture">
-<h1>{{ post.name }}</h1>
-<h2>{{ post.category }}</h2>
-<p>{{ post.content|linebreaks }}</p>
-<p class="date">{{ post.created }} by {{ post.author }}</p>
-<a href="{% url "forum:post_list" %}">Go to Home</a>
-{% with total_likes=post.users_like.count users_like=post.users_like.all %}
-<span class="count"><span class="total">{{ total_likes }} </span> like{{ total_likes|pluralize }}</span>
-<a href="#" data-id="{{ post.id }}" data-action="{% if request.user in users_like %}un{% endif %}like" class="like button">
-{% if request.user not in users_like %}
-Like
-{% else %}
-Unlike
-{% endif %}
-</a>
-{% endwith %}
-{% with comments.count as total_comments %}
-<h2>
-{{ total_comments }} comment {{ total_comments|pluralize }}
-</h2>
-{% endwith %}
-{% for comment in comments %}
-<div class="comment">
-<p class="info">
-Comment {{ forloop.counter }} by {{ comment.author }}
-</p>
-{{ comment.content|linebreaks }}
+<div class="container mt-4"> <!-- Add container and margin-top to create space -->
+    <div class="row">
+        <div class="col-md-8">
+            <div class="post-detail">
+             
+                {% if post.image %}
+                <img src="{{ post.image.url }}" class="post-picture img-fluid mb-3" alt="{{ post.name }}">
+                {% else %}
+                <img src="{% static 'img/no_image.png' %}" class="post-picture img-fluid mb-3" alt="No Image">
+                {% endif %}
+                
+                <h1 class="post-title">{{ post.name }}</h1>
+                <h2 class="post-category">{{ post.category }}</h2>
+                <p class="post-content">{{ post.content|linebreaks }}</p>
+                <p class="post-date">{{ post.created|date:"F d, Y" }} by {{ post.author }}</p>
+                <a href="{% url 'forum:post_list' %}" class="btn btn-primary">Go to Home</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <!-- Add space from sidebar content if needed -->
+        </div>
+    </div>
 </div>
-{% empty %}
-<p>There are no comments.</p>
-{% endfor %}
-{% include "forum/post/includes/comment_form.html" %}
+<div class="post-comments container mt-4"> <!-- Add margin-top for comments section -->
+    <!-- Rest of your comments section -->
+<h2>{{ comments.count }} comment{{ comments.count|pluralize }}</h2>
+    
+    {% for comment in comments %}
+    <div class="comment">
+        <div class="comment-header">
+            <span class="comment-author">{{ comment.author }}</span>
+            <span class="comment-date">{{ comment.created|date:"F d, Y" }}</span>
+        </div>
+        <p class="comment-content">{{ comment.content|linebreaks }}</p>
+    </div>
+    {% empty %}
+    <p class="no-comments">There are no comments.</p>
+    {% endfor %}
+    {% include "forum/post/includes/comment_form.html" %}
+    <div class="mt-4"></div>
 </div>
 {% endblock %}
 
-{% block domready %}
-const url = '{% url "forum:like" %}';
-var options = {
-  method: 'POST',
-  headers: {'X-CSRFToken': csrftoken},
-  mode: 'same-origin'
-  }
- document.querySelector('a.like')
-         .addEventListener('click', function(e){
-         e.preventDefault();
-         var likeButton = this;
-         
-         var formData = new FormData();
-         formData.append('id', likeButton.dataset.id);
-         formData.append('action', likeButton.dataset.action);
-         options['body'] = formData;
-         
-         <!-- send http request -->
-         fetch(url, options)
-         .then(response => response.json())
-         .then(data => {
-         if (data['status'] === 'ok')
-         {
-         var previousAction = likeButton.dataset.action;
-         // toggle button text and data-action
-         var action = previousAction === 'like' ? 'unlike' : 'like';
-         likeButton.dataset.action = action;
-         likeButton.innerHTML = action;
-         var likeCount = document.querySelector('span.count.total');
-         var totalLikes = parseInt(likeCount.innerHTML);
-         likeCount.innerHTML = previousAction === 'like' ? totalLikes + 1: totalLikes - 1;
-         }
-         })
-         });
-         {% endblock %}

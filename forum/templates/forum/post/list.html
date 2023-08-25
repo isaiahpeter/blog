@@ -1,31 +1,41 @@
 {% extends "forum/base.html" %}
 {% load static %}
-{% block title %}{% if category %} {{ category.name}}{% else %}Posts{% endif %}
-{% endblock %}
+{% block title %}{% if category %} {{ category.name }}{% else %}Posts{% endif %}{% endblock %}
 
 {% block content %}
-<aside>
-<section class="categories">
-<h2>Categories</h2>
-{% for c in categories %}
-  {% if category.slug == c.slug %}{% endif %}
-<a href="{{ c.get_absolute_url }}">{{ c.name }}</a>
-{% endfor %}
-<!--<h3>{% if category %}{{ category.name }}{% else %} Posts{% endif %}</h3> -->
-</section>
-</aside>
-<section class="posts">
-{% for p in posts %}
-<article>
-<a href="{{ p.get_absolute_url }}"><figure><img src="{% if p.image  %}{{ p.image.url }} {% else %}{% static "img/no_image.png" %}{% endif %}" > 
-<figcaption><a href="{{ p.get_absolute_url }}">{{ p.title }}</a></figcaption>
-</figure>
-<hgroup>
-<h2>{{ p.category }}</h2>
-<h3>{{ p.title }} </h3>
-</hgroup>
-<p>{{ p.content|truncatewords:40 }}</p>
-</article>
-{% endfor %}
-</section>
+<div class="container">
+    <div class="row">
+        <section class="col-md-8">
+            <div class="posts">
+                {% for p in posts %}
+                <article>
+                    <a href="{{ p.get_absolute_url }}">
+                        <figure>
+                            <img src="{% if p.image %}{{ p.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}" alt="{{ p.title }}"  height="300" width="300">
+                            <figcaption>{{ p.title }}</figcaption>
+                        </figure>
+                        <hgroup>
+                            <h3>{{ p.title }}</h3>
+                            <h4>{{ p.category }}</h4>
+                        </hgroup>
+                        <p>{{ p.content|truncatewords:40 }}</p>
+                    </a>
+                </article>
+                {% endfor %}
+            </div>
+        </section>
+
+        <aside class="col-md-4">
+            <section class="categories">
+                <h2>Categories</h2>
+                <div class="list-group">
+                    {% for c in categories %}
+                    <a href="{{ c.get_absolute_url }}" class="list-group-item list-group-item-action{% if category.slug == c.slug %} active{% endif %}">{{ c.name }}</a>
+                    {% endfor %}
+                </div>
+            </section>
+        </aside>
+    </div>
+</div>
 {% endblock %}
+

@@ -1,3 +1,5 @@
+media/
+posts/
 venv/
 *.sqlite3
 *.pyc

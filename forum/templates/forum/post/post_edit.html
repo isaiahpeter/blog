@@ -1,14 +1,18 @@
 {% extends "forum/base.html" %}
 {% load bootstrap4 %}
-{% block content %}
-<h1>edit post</h1>
-<form action="{% url 'forum:post_edit' post.slug %}" method="POST" enctype="multipart/form-data" class="form">
 
-{% csrf_token %}
-{% bootstrap_form form %}
-{% buttons %}
-<button name="submit" class="btn btn-primary">save post</button>
-{% endbuttons %}
-</form>
+{% block content %}
+<div class="container mt-4"> <!-- Add margin-top to create space -->
+    <h1>edit post</h1>
+    <form action="{% url 'forum:post_edit' post.slug %}" method="POST" enctype="multipart/form-data" class="form">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+        <button name="submit" class="btn btn-primary">save post</button>
+        {% endbuttons %}
+    </form>
+    <div class="mt-4"></div>
+</div>
 {% endblock content %}
+
 
