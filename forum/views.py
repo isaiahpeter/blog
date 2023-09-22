@@ -7,6 +7,8 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from accounts.models import CustomUser
 from django.views.decorators.http import require_POST
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 # Create your views here.
 
 def home(request):
@@ -17,10 +19,18 @@ def home(request):
 def post_list(request,category_slug=None):
     category = None
     categories = Category.objects.all()
-    posts = Post.objects.all()
-    if category_slug:
-        category = get_object_or_404(Category, slug=category_slug)
-        posts = posts.filter(category=category)
+    post_list = Post.objects.all()
+    paginator = Paginator(post_list, 5)
+    page_number = request.GET.get('page')
+    try:   
+        posts = paginator.page(page_number)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
+        if category_slug:
+            category = get_object_or_404(Category, slug=category_slug)
+            posts = posts.filter(category=category)
     return render(request, 'forum/post/list.html', {'category': category, 'categories': categories, 'posts': posts})
 
 def post_detail(request, year, month, day,post):
@@ -67,9 +77,6 @@ def post_delete(request, slug):
     return render(request, 'forum/post/post_delete.html', {'post':post})
     
 
-def profile(request, username):
-    user = CustomUser.objects.get(username=username)
-    return render(request, 'forum/post/profile.html', {'user':user})
 
 @require_POST
 def post_comment(request, post_id):

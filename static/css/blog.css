@@ -1,1 +1,36 @@
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.page-link {
+  color: #007bff;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.page-number, .page-current {
+  display: inline-block;
+  color: #333;
+  padding: 6px 10px;
+  margin: 0 2px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.page-number:hover {
+  background-color: #f8f9fa;
+}
+
+.page-current {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
 

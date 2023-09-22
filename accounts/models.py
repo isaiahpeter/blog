@@ -27,8 +27,6 @@ class MyUserManager(BaseUserManager):
 
 # Create your models here.
 class CustomUser(AbstractUser, PermissionsMixin):
-    bio = models.TextField(max_length=500, blank=True)
-    profile_picture = models.ImageField(upload_to='profile_pictures', blank=True, null=True)
     age = models.IntegerField(blank=True, null=True)
     email = models.EmailField(unique=True)
     GENDER_CHOICES = (
@@ -56,9 +54,11 @@ class CustomUser(AbstractUser, PermissionsMixin):
 
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, 
-                                on_delete=models.CASCADE)
+                                on_delete=models.CASCADE, verbose_name="user profile")
     date_of_birth = models.DateField(blank=True, null=True)
-    photo = models.ImageField(upload_to='users/%Y/%m/%d/', blank=True)
+    bio = models.TextField(max_length=500, blank=True)
+    profile_picture = models.ImageField(upload_to='profile_pictures', blank=True, null=True)
+
 
     def __str__(self):
         return f'Profile of {self.user.username}'

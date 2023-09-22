@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from .models import CustomUser
+from .models import CustomUser, Profile
 from django.utils.translation import gettext_lazy as _
 
 class RegistrationForm(UserCreationForm):
@@ -31,8 +31,8 @@ class RegistrationForm(UserCreationForm):
 
 class ProfileForm(forms.ModelForm):
     class Meta:
-        model = CustomUser
-        fields = ( 'email', 'bio', 'age', 'gender')
+        model = Profile
+        fields = ('date_of_birth', 'bio', 'profile_picture')
 class CustomUserCreationForm(UserCreationForm):
     age= forms.IntegerField(label='Age')
     class Meta(UserCreationForm.Meta):

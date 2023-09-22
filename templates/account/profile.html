@@ -1,0 +1,9 @@
+{% extends "forum/base.html" %}
+
+{% block content %}
+<ul>
+{% for user in object_list %}
+<li>{{ user.bio }}</li>
+<li>{{ user.date_of_birth }}</li>
+</ul>
+{% endblock %}

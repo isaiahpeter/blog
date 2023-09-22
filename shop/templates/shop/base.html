@@ -26,22 +26,36 @@
                         <li class="nav-item"><a class="nav-link">{{ user.username }}</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'account_logout' %}">Logout</a></li> 
                         <li class="nav-item"><a class="nav-link" href="{% url 'forum:post_create' %}">Create Post</a></li>
-                    {% else %}
+                        {% else %}
                         <li class="nav-item"><a class="nav-link" href="{% url 'account_login' %}">Login</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'account_reset_password' %}">Reset Password</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'account_change_password' %}">Change Password</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'account_signup' %}">Signup</a></li>
                         {% endif %}
-                       <li class="nav-item"><a class="nav-link" href="{% url 'shop:product_list' %}">Shop</a></li>
+                       
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="mt-4">
+   <div class="mt-4">
+        <div class="cart">
+            {% with total_items=cart|length %}
+                {% if total_items > 0 %}
+                    Your cart:
+                    <a href="{% url "cart:cart_detail" %}">
+                        {{ total_items }} item{{ total_items|pluralize }},
+                        ₦{{ cart.get_total_price }}
+                    </a>
+                {% elif not order %}
+                    Your cart is empty.
+                {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+
                     {% block content %}
                     <div class="mt-4">
-                    
                     </div>
                     {% endblock content %}
     </div>

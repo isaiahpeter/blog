@@ -28,7 +28,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['localhost',"*"]
 
@@ -53,8 +53,11 @@ INSTALLED_APPS = [
    'allauth.socialaccount',
     'accounts.apps.AccountsConfig',
     'forum.apps.ForumConfig',
+    'shop.apps.ShopConfig',
+    'cart.apps.CartConfig',
+    'orders.apps.OrdersConfig',
 ]
-
+CART_SESSION_ID = 'cart'
 SITE_ID = 1
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -81,6 +84,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'cart.context_processors.cart',
             ],
         },
     },
@@ -170,7 +174,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 
-#EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'isaiahjuniorp@gmail.com'

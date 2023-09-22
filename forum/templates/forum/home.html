@@ -1,5 +1,13 @@
 {% extends "forum/base.html" %}
 {% load static %}
-{% block content %}
 
-{% endblock content %}
+{% block content %}
+<div class="container text-center mt-5">
+  <div class="jumbotron" style="border: 2px solid #ccc; padding: 20px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);">
+    <h1 class="display-3">Express your ideas with ease</h1>
+    <p class="lead">A place where you can buy, express your ideas clearly with text.</p>
+    <a class="btn btn-lg btn-primary" href="{% url 'account_signup' %}" role="button">Register &raquo;</a>
+  </div>
+</div>
+{% endblock %}
+
